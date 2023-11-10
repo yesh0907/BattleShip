@@ -8,11 +8,11 @@ export class SerialComm {
     private socket: Socket | null = null;
     private sendingToGame: boolean = false;
 
-    constructor() {
+    constructor(path: string) {
         // Open Serial Port communication with Arduino
         this.port = new SerialPort(
             {
-                path: "/dev/tty.usbmodem14401",
+                path,
                 baudRate: 9600,
             },
             (err) => {

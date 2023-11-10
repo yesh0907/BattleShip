@@ -4,6 +4,8 @@ import { Server as IOServer } from "socket.io";
 import { SerialComm } from "./serial";
 import { GameStateEvents, ServerActions } from "./actions";
 
+const ARDUINO_PORT = "/dev/tty.usbmodem14401";
+
 const app = express();
 const server = createServer(app);
 const io = new IOServer(server, {
@@ -13,7 +15,7 @@ const io = new IOServer(server, {
 });
 const port = 4000;
 
-const comm = new SerialComm();
+const comm = new SerialComm(ARDUINO_PORT);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
