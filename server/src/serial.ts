@@ -2,8 +2,10 @@ import { SerialPort, ReadlineParser } from "serialport";
 import { ArduinoActions, GameActions, ServerActions } from "./actions";
 import { Socket } from "socket.io";
 
+// Handles all serial communication with the Arduino
 export class SerialComm {
     public port: SerialPort;
+
     private parser: ReadlineParser;
     private socket: Socket | null = null;
     private sendingToGame: boolean = false;
@@ -76,6 +78,7 @@ export class SerialComm {
         });
     }
 
+    // Send data to the Arduino through the serial port
     public sendToArduino(data: ServerActions) {
         this.port.write(data.toString(), (err) => {
             if (err) {
@@ -84,6 +87,7 @@ export class SerialComm {
         });
     }
 
+    // Send data to the webapp through socket.io
     public sendToGame(data: GameActions) {
         if (this.socket) {
             if (!this.sendingToGame) {
@@ -98,24 +102,10 @@ export class SerialComm {
         }
     }
 
+    // Set the socket for WebSocket communication with the webapp
     public setSocket(socket: Socket) {
         this.socket = socket;
+        // Tell Arduino that server is connected to webapp and is ready for game
         this.sendToArduino(ServerActions.READY_FOR_GAME);
     }
-
-    private getPorts = async () => {
-        const ports = await SerialPort.list();
-        ports.forEach((port) => {
-            console.log(port.path);
-        });
-    };
 }
-
-const getPorts = async () => {
-    const ports = await SerialPort.list();
-    ports.forEach((port) => {
-        console.log(port.path);
-    });
-};
-
-export { getPorts };
