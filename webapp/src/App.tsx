@@ -3,8 +3,10 @@ import Game from "./components/Game"
 import { socket } from "./socket";
 
 function App() {
+  // State to keep track of connection status of the WebSocket
   const [isConnected, setIsConnected] = useState(socket.connected);
 
+  // Set up and clean up the WebSocket connection
   useEffect(() => {
     function onConnect() {
       setIsConnected(true);
